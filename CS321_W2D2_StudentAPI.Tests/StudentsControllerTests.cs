@@ -14,14 +14,30 @@ namespace CS321_W2D2_StudentAPI.Tests
         [Fact]
         public void Post_ShouldReturnBadRequestWhenBirthDateIsInTheFuture()
         {
+<<<<<<< HEAD
             Assert.Throws<ApplicationException>(() => TryPost(new Student
+=======
+            // Ensure that Post() returns BadRequest status code if
+            // the given birthdate is in the future
+
+            // act - call Post() with a student with a bad birthdate
+            var result = TryPost(new Student
+>>>>>>> parent of db1c480... update to netcoreapp3.1
             {
                 FirstName = "John",
                 LastName = "Doe",
                 BirthDate = new DateTime(2999, 1, 1), // in the future
                 Email = "test@test.com",
+<<<<<<< HEAD
                 Phone = "555-555-5555"
             }));
+=======
+                Phone = "555-555-5555"
+            });
+
+            // assert
+            Assert.IsType<BadRequestObjectResult>(result);
+>>>>>>> parent of db1c480... update to netcoreapp3.1
         }
 
         [Fact]
@@ -102,12 +118,18 @@ namespace CS321_W2D2_StudentAPI.Tests
             }));
         }
 
+<<<<<<< HEAD
         private IActionResult TryPost(Student student)
         {
+=======
+        public IActionResult TryPost(Student student)
+        {
+>>>>>>> parent of db1c480... update to netcoreapp3.1
             // arrange - create a new controller
             var controller = new StudentsController(new StudentsService());
 
             // act - call Post() with given student 
+<<<<<<< HEAD
             return controller.Post(student);
         }
 
@@ -117,6 +139,9 @@ namespace CS321_W2D2_StudentAPI.Tests
             var results = new List<ValidationResult>();
             var valid = Validator.TryValidateObject(student, context, results, true);
             return valid;
+=======
+            return controller.Post(student);
+>>>>>>> parent of db1c480... update to netcoreapp3.1
         }
     }
 }
