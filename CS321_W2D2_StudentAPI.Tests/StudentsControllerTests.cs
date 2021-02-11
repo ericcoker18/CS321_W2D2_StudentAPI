@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Xunit;
 using CS321_W2D2_StudentAPI.Controllers;
 using CS321_W2D2_StudentAPI.Services;
@@ -12,149 +14,109 @@ namespace CS321_W2D2_StudentAPI.Tests
         [Fact]
         public void Post_ShouldReturnBadRequestWhenBirthDateIsInTheFuture()
         {
-            // Ensure that Post() returns BadRequest status code if
-            // the given birthdate is in the future
-
-            // act - call Post() with a student with a bad birthdate
-            var result = TryPost(new Student
+            Assert.Throws<ApplicationException>(() => TryPost(new Student
             {
                 FirstName = "John",
                 LastName = "Doe",
                 BirthDate = new DateTime(2999, 1, 1), // in the future
                 Email = "test@test.com",
                 Phone = "555-555-5555"
-            });
-
-            // assert
-            Assert.IsType<BadRequestObjectResult>(result);
+            }));
         }
 
         [Fact]
         public void Post_ShouldReturnBadRequestWhenBirthDateIsTooEarly()
         {
-            // Ensure that Post() returns BadRequest status code if
-            // the given birthdate is in the future
-
-            // act - call Post() with a student with a bad birthdate
-            var result = TryPost(new Student
+            Assert.Throws<ApplicationException>(() => TryPost(new Student
             {
                 FirstName = "John",
                 LastName = "Doe",
                 BirthDate = new DateTime(1899, 1, 1), // too old
                 Email = "test@test.com",
                 Phone = "555-555-5555"
-            });
-
-            // assert
-            Assert.IsType<BadRequestObjectResult>(result);
+            }));
         }
 
         [Fact]
         public void Post_ShouldReturnBadRequestWhenEmailIsInvalid()
         {
-            // Ensure that Post() returns BadRequest status code if
-            // the given email is invalid
-
-            // act - call Post() with a student with a bad email
-            var result = TryPost(new Student
+            Assert.False(IsValid(new Student
             {
                 FirstName = "John",
                 LastName = "Doe",
-                BirthDate = new DateTime(1899, 1, 1),
+                BirthDate = new DateTime(2020, 1, 1),
                 Email = "a.bad.email", // bad email
                 Phone = "555-555-5555"
-            });
-
-            // assert
-            Assert.IsType<BadRequestObjectResult>(result);
+            }));
         }
 
         [Fact]
         public void Post_ShouldReturnBadRequestWhenPhoneIsInvalid()
         {
-            // Ensure that Post() returns BadRequest status code if
-            // the given email is invalid
-
-            // act - call Post() with a student with a bad phone
-            var result = TryPost(new Student
+            Assert.False(IsValid(new Student
             {
                 FirstName = "John",
                 LastName = "Doe",
-                BirthDate = new DateTime(1899, 1, 1),
+                BirthDate = new DateTime(2010, 1, 1),
                 Email = "test@test.com",
-                Phone = "5555-5555-5555" // bad phone
-            });
-
-            // assert
-            Assert.IsType<BadRequestObjectResult>(result);
+                Phone = "abc" // bad phone
+            }));
         }
 
         [Fact]
         public void Post_ShouldReturnBadRequestWhenFirstNameIsMissing()
         {
-            // Ensure that Post() returns BadRequest status code if
-            // the given email is invalid
-
-            // act - call Post() with a student with a bad phone
-            var result = TryPost(new Student
+            Assert.False(IsValid(new Student
             {
                 // FirstName = "John", // missing
                 LastName = "Doe", 
-                BirthDate = new DateTime(1899, 1, 1),
+                BirthDate = new DateTime(2010, 1, 1),
                 Email = "test@test.com",
-                Phone = "5555-5555-5555" // bad phone
-            });
-
-            // assert
-            Assert.IsType<BadRequestObjectResult>(result);
+                Phone = "555-555-5555"
+            }));
         }
 
         [Fact]
         public void Post_ShouldReturnBadRequestWhenLastNameIsMissing()
         {
-            // Ensure that Post() returns BadRequest status code if
-            // the given email is invalid
-
-            // act - call Post() with a student with a bad phone
-            var result = TryPost(new Student
+            Assert.False(IsValid(new Student
             {
                 FirstName = "John",
                 // LastName = "Doe", // missing
-                BirthDate = new DateTime(1899, 1, 1),
+                BirthDate = new DateTime(2010, 1, 1),
                 Email = "test@test.com",
-                Phone = "5555-5555-5555" // bad phone
-            });
-
-            // assert
-            Assert.IsType<BadRequestObjectResult>(result);
+                Phone = "555-555-5555"
+            }));
         }
 
         [Fact]
         public void Post_ShouldReturnOkWhenStudentIsValid()
         {
-            // Ensure that Post() returns Created status code if
-            // the given student object is valid
-
-            var result = TryPost(new Student
+            Assert.True(IsValid(new Student
             {
                 FirstName = "John",
                 LastName = "Doe",
                 BirthDate = new DateTime(2009, 1, 1),
                 Email = "test@test.com",
                 Phone = "555-555-5555"
-            });
-
-            // assert
-            Assert.IsType<CreatedAtActionResult>(result);
+            }));
         }
 
-        public IActionResult TryPost(Student student)
+        private IActionResult TryPost(Student student)
         {
             // arrange - create a new controller
-            var controller = new StudentsController();
+            var controller = new StudentsController(new StudentsService());
 
             // act - call Post() with given student 
-            return controller.Post(null);
+            return controller.Post(student);
+        }
+
+        private bool IsValid(Student student)
+        {
+            var context = new ValidationContext(student, null, null);
+            var results = new List<ValidationResult>();
+            var valid = Validator.TryValidateObject(student, context, results, true);
+            return valid;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using CS321_W2D2_StudentAPI.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +20,7 @@ namespace CS321_W2D2_StudentAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            // configure IStudentService for injection
+            services.AddSingleton<StudentsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
