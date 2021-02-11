@@ -151,10 +151,10 @@ namespace CS321_W2D2_StudentAPI.Tests
         public IActionResult TryPost(Student student)
         {
             // arrange - create a new controller
-            var controller = new StudentsController(new StudentsService());
+            var controller = new StudentsController();
 
             // act - call Post() with given student 
-            return controller.Post(student);
+            return controller.Post(null);
         }
     }
 }
