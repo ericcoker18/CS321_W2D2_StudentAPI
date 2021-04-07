@@ -43,7 +43,7 @@ namespace CS321_W2D2_StudentAPI.Services
             return student;
         }
 
-        private void ValidateBirthDate(Student student)
+        public void ValidateBirthDate(Student student)
         {
             if (student.BirthDate > DateTime.Now)
             {
@@ -57,36 +57,28 @@ namespace CS321_W2D2_StudentAPI.Services
 
         public Student Get(int id)
         {
-            return _students.FirstOrDefault(s => s.Id == id);
+            // return the specified Student or null if not found
         }
 
         public IEnumerable<Student> GetAll()
         {
-            return _students;
+            // return all students
         }
 
         public Student Update(Student updatedStudent)
         {
             // get the Student object in the current list with this id 
-            var currentStudent = _students.FirstOrDefault(s => s.Id == updatedStudent.Id);
 
             // return null if item to update isn't found
-            if (currentStudent == null)
-                return null;
 
             // copy the property values from the updated student into the current student object
-            currentStudent.Email = updatedStudent.Email;
-            currentStudent.Phone = updatedStudent.Phone;
-            currentStudent.BirthDate = updatedStudent.BirthDate;
-            currentStudent.FirstName = updatedStudent.FirstName;
-            currentStudent.LastName = updatedStudent.LastName;
 
-            return currentStudent;
+            // return student
         }
 
         public void Remove(Student student)
         {
-            _students.Remove(student);
+            // remove student
         }
     }
 }

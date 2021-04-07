@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using CS321_W2D2_StudentAPI.Models;
+﻿using CS321_W2D2_StudentAPI.Models;
 using CS321_W2D2_StudentAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,10 +11,9 @@ namespace CS321_W2D2_StudentAPI.Controllers
         private readonly IStudentsService _studentsService;
 
         // Constructor
-        public StudentsController(StudentsService studentsService)
+        public StudentsController(/* HINT: what parameter is necessary to inject the service? */)
         {
             // HINT: keep a reference to the incoming service
-            _studentsService = studentsService;
         }
 
         // get all students
