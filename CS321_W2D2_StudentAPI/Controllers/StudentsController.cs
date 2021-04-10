@@ -11,8 +11,9 @@ namespace CS321_W2D2_StudentAPI.Controllers
         private readonly IStudentsService _studentsService;
 
         // Constructor
-        public StudentsController(/* HINT: what parameter is necessary to inject the service? */)
+        public StudentsController(StudentsService studentsService)
         {
+            _studentsService = studentsService;
             // HINT: keep a reference to the incoming service
         }
 
@@ -46,10 +47,15 @@ namespace CS321_W2D2_StudentAPI.Controllers
             // add the new student
             _studentsService.Add(newStudent);
 
+
             // return a 201 Created status. This will also add a "location" header
             // with the URI of the new student. E.g., /api/students/99, if the new is 99
             return CreatedAtAction("Get", new { Id = newStudent.Id }, newStudent);
+
         }
+    
+
+     
 
         // update an existing student
         // PUT api/students/:id
